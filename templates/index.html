@@ -2,26 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Serveur ESP32</title>
+  <title>Serveur Python</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-  <h1>Température actuelle : <span id="temp">...</span> °C</h1>
+  <h1>🌡️ Température : <span id="temp">...</span> °C</h1>
+  <h1>💧 Humidité : <span id="hum">...</span> %</h1>
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-  <script>
-    // Connexion au broker MQTT via WebSocket
-    const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
-
-    client.on('connect', () => {
-      console.log('Connecté au broker MQTT');
-      client.subscribe('VHT/Température/Salon');
-    });
-
-    client.on('message', (topic, message) => {
-      const temp = message.toString();
-      document.getElementById('temp').innerText = temp;
-    });
-  </script>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
