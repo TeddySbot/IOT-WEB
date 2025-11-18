@@ -3,8 +3,26 @@ body {
   font-family: Arial, sans-serif;
   text-align: center;
   margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centre horizontalement */
+  align-items: center;     /* centre verticalement */
 }
 
-h1 {
+
+
+h2.title {
+  text-align: center; /* <- ajoute ça */
   color: #a50000;
+  font-size: 50px;
+}
+
+
+
+.container {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    width: 350px;
 }
