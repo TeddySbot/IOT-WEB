@@ -13,10 +13,8 @@ client.on('message', (topic, message) => {
   const msg = message.toString();
 
   try {
-    // On parse le message JSON
     const data = JSON.parse(msg);
 
-    // On met à jour les éléments HTML
     document.getElementById('temp').innerText = data.Celsius;
     document.getElementById('hum').innerText = data.Humidité;
   } catch (e) {
