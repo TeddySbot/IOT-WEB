@@ -59,3 +59,33 @@ def get_user(username, password):
         (username, hash_pwd(password))
     ).fetchone()
     return user
+
+# ---------- CRUD POTS ---------- #
+def get_pots(user_id):
+    conn = get_db()
+    pots = conn.execute(
+        "SELECT * FROM pots WHERE user_id=?",
+        (user_id,)
+    ).fetchall()
+    return pots
+
+def add_pot(user_id, name):
+    conn = get_db()
+    # on insère d'abord le pot sans topic
+    cur = conn.execute(
+        "INSERT INTO pots (user_id, name, topic) VALUES (?, ?, ?)",
+        (user_id, name, "")
+    )
+    pot_id = cur.lastrowid
+
+    topic = f"Ynov/VHT/{user_id}/{pot_id}"
+
+    conn.execute(
+        "UPDATE pots SET topic=? WHERE id=?",
+        (topic, pot_id)
+    )
+    conn.commit()
+    conn.close()
+
+    return pot_id, topic
+
