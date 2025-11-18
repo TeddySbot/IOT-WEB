@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import bdd  # import de ton module db.py
+import bdd 
 
 app = Flask(__name__)
 app.secret_key = "demo-key"
@@ -27,7 +27,7 @@ def login():
 
     return render_template("login.html")
 
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/signup", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form["username"]
@@ -38,7 +38,7 @@ def register():
         else:
             return "Utilisateur déjà existant"
 
-    return render_template("register.html")
+    return render_template("signup.html")
 
 @app.route("/add-pot", methods=["POST"])
 def add_pot():

@@ -25,6 +25,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS pots (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
+            mqtt_id INTEGER NOT NULL,
             name TEXT NOT NULL,
             topic TEXT NOT NULL,
             FOREIGN KEY(user_id) REFERENCES users(id)
@@ -58,6 +59,7 @@ def get_user(username, password):
         "SELECT * FROM users WHERE username=? AND password=?",
         (username, hash_pwd(password))
     ).fetchone()
+    conn.close()
     return user
 
 # ---------- CRUD POTS ---------- #
@@ -67,18 +69,24 @@ def get_pots(user_id):
         "SELECT * FROM pots WHERE user_id=?",
         (user_id,)
     ).fetchall()
+    conn.close()
     return pots
 
 def add_pot(user_id, name):
     conn = get_db()
-    # on insère d'abord le pot sans topic
     cur = conn.execute(
-        "INSERT INTO pots (user_id, name, topic) VALUES (?, ?, ?)",
-        (user_id, name, "")
+        "SELECT COALESCE(MAX(mqtt_id), 0) + 1 FROM pots WHERE user_id = ?",
+        (user_id,)
+    )
+    next_mqtt_id = cur.fetchone()[0]
+
+    cur = conn.execute(
+        "INSERT INTO pots (user_id, mqtt_id, name, topic) VALUES (?, ?, ?, ?)",
+        (user_id, next_mqtt_id, name, "")
     )
     pot_id = cur.lastrowid
 
-    topic = f"Ynov/VHT/{user_id}/{pot_id}"
+    topic = f"Ynov/VHT/{user_id}/{next_mqtt_id}"
 
     conn.execute(
         "UPDATE pots SET topic=? WHERE id=?",
