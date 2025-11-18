@@ -28,7 +28,7 @@ client.on('message', (topic, message) => {
     try {
         const data = JSON.parse(msg);
 
-        // Ynov/VHT/userId/potId  → ["Ynov","VHT","1","1"]
+        // Ynov/VHT/userId/mqtt_Id  → ["Ynov","VHT","1","1"]
         const parts = topic.split('/');
         const userIdFromTopic = parts[2];
         const potId = parts[3];
@@ -37,6 +37,7 @@ client.on('message', (topic, message) => {
 
         const tempEl = document.getElementById(`temp_${potId}`);
         const humEl  = document.getElementById(`hum_${potId}`);
+        const solE1 = document.getElementById(`sol_${potId}`);
 
         if (!tempEl || !humEl) {
             console.warn('⚠️ Pas d’éléments HTML pour ce pot', potId);
@@ -45,6 +46,10 @@ client.on('message', (topic, message) => {
 
         tempEl.innerText = data.Celsius ?? '--';
         humEl.innerText  = data.Humidité ?? '--';
+
+        if (solE1) {
+            solE1.innerText = data.Sol ?? '--';
+        }
     } catch (e) {
         console.error('💥 Erreur parsing JSON :', e, 'Message brut:', msg);
     }

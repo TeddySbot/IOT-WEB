@@ -12,7 +12,8 @@
             Topic : {{ pot.topic }}<br>
 
             Température : <span id="temp_{{ pot.mqtt_id }}">--</span> °C<br>
-            Humidité : <span id="hum_{{ pot.mqtt_id }}">--</span> %
+            Humidité : <span id="hum_{{ pot.mqtt_id }}">--</span> %<br>
+            Humidité du sol : <span id="sol_{{pot.mqtt_id}}">--</span> %
         </li>
         <hr>
         {% endfor %}
