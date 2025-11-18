@@ -1,10 +1,60 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session
+import bdd  # import de ton module db.py
 
 app = Flask(__name__)
+app.secret_key = "demo-key"
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    if "user" not in session:
+        return redirect(url_for("login"))
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    pots = bdd.get_pots(session["user_id"])
+    return render_template("dashboard.html", username=session["user"], pots=pots)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        user = bdd.get_user(username, password)
+        if user:
+            session["user"] = user["username"]
+            session["user_id"] = user["id"]
+            return redirect(url_for("home"))
+        return "Identifiants invalides"
+
+    return render_template("login.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        if bdd.create_user(username, password):
+            return redirect(url_for("login"))
+        else:
+            return "Utilisateur déjà existant"
+
+    return render_template("register.html")
+
+@app.route("/add-pot", methods=["POST"])
+def add_pot():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    name = request.form["name"]
+
+    bdd.add_pot(session["user_id"], name)
+    return redirect(url_for("home"))
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+if __name__ == "__main__":
+    bdd.init_db()
+    app.run(host="0.0.0.0", port=5000, debug=True)

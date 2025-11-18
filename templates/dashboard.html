@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<body>
+    <h1>Bienvenue {{ username }}</h1>
+
+    <h2>Vos pots connectés</h2>
+
+    <ul>
+        {% for pot in pots %}
+        <li data-id="{{ pot.id }}" data-topic="{{ pot.topic }}">
+            <strong>{{ pot.name }}</strong><br>
+            Topic : {{ pot.topic }}<br>
+
+            Température : <span id="temp_{{ pot.id }}">--</span> °C<br>
+            Humidité : <span id="hum_{{ pot.id }}">--</span> %
+        </li>
+        <hr>
+        {% endfor %}
+    </ul>
+
+    <h3>Ajouter un pot</h3>
+    <form method="POST" action="/add-pot">
+        <input name="name" placeholder="Nom du pot" required>
+        <button>Ajouter</button>
+    </form>
+
+    <a href="/logout">Déconnexion</a>
+
+    <!-- 1) lib MQTT -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+    <!-- 2) variable USER_ID injectée par Flask -->
+    <script>
+        const USER_ID = Number("{{ session.get('user_id', 0) }}");
+        console.log("USER_ID depuis Flask :", USER_ID);
+    </script>
+
+    <!-- 3) ton script applicatif -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    </body>
+</html>
