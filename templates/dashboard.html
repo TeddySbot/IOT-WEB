@@ -12,7 +12,6 @@
         {% for pot in pots %}
         <li data-id="{{ pot.mqtt_id }}" data-topic="{{ pot.topic }}">
             <strong>{{ pot.name }}</strong><br>
-            Topic : {{ pot.topic }}<br>
 
             Température : <span id="temp_{{ pot.mqtt_id }}">--</span> °C<br>
             Humidité : <span id="hum_{{ pot.mqtt_id }}">--</span> %<br>
