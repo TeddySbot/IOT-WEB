@@ -25,7 +25,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS pots (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            mqtt_id INTEGER NOT NULL,
+            mqtt_id TEXT NOT NULL,
             name TEXT NOT NULL,
             topic TEXT NOT NULL,
             FOREIGN KEY(user_id) REFERENCES users(id)
@@ -72,21 +72,19 @@ def get_pots(user_id):
     conn.close()
     return pots
 
-def add_pot(user_id, name):
+def add_pot(user_id, name, code):
     conn = get_db()
-    cur = conn.execute(
-        "SELECT COALESCE(MAX(mqtt_id), 0) + 1 FROM pots WHERE user_id = ?",
-        (user_id,)
-    )
-    next_mqtt_id = cur.fetchone()[0]
+
+    # On utilise directement "code" comme mqtt_id
+    mqtt_id = code
 
     cur = conn.execute(
         "INSERT INTO pots (user_id, mqtt_id, name, topic) VALUES (?, ?, ?, ?)",
-        (user_id, next_mqtt_id, name, "")
+        (user_id, mqtt_id, name, "")
     )
     pot_id = cur.lastrowid
 
-    topic = f"Ynov/VHT/{user_id}/{next_mqtt_id}"
+    topic = f"Ynov/VHT/{user_id}/{mqtt_id}"
 
     conn.execute(
         "UPDATE pots SET topic=? WHERE id=?",
@@ -96,4 +94,5 @@ def add_pot(user_id, name):
     conn.close()
 
     return pot_id, topic
+
 

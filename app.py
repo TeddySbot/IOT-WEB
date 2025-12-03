@@ -1,8 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import bdd 
+import bdd
+import paho.mqtt.client as mqtt
+import json
 
 app = Flask(__name__)
 app.secret_key = "demo-key"
+
+MQTT_BROKER = "broker.emqx.io"
+MQTT_PORT = 1883
+MQTT_BASE_TOPIC = "Ynov/VHT"
+
+mqtt_client = mqtt.Client()
+mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+mqtt_client.loop_start()
 
 @app.route("/")
 def home():
@@ -45,9 +55,16 @@ def add_pot():
     if "user" not in session:
         return redirect(url_for("login"))
 
+    user_id = session["user_id"]
     name = request.form["name"]
+    code = request.form["code"]
+    nomtopic = "idClient"
 
-    bdd.add_pot(session["user_id"], name)
+    pot_id, topic = bdd.add_pot(user_id, name, code)
+
+    topic = f"{MQTT_BASE_TOPIC}/{nomtopic}/{code}"
+    payload = json.dumps({"user_id": session["user_id"]})
+    mqtt_client.publish(topic, payload, qos=1)
     return redirect(url_for("home"))
 
 @app.route("/logout")

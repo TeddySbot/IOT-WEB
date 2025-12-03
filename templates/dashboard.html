@@ -23,9 +23,14 @@
     </ul>
 
     <h3>Ajouter un pot</h3>
-    <form method="POST" action="/add-pot">
-        <input name="name" placeholder="Nom du pot" required>
-        <button>Ajouter</button>
+    <form action="/add-pot" method="POST">
+        <label>Nom du pot</label>
+        <input type="text" name="name" required>
+
+        <label>Code</label>
+        <input type="text" name="code" required>
+
+        <button type="submit">Ajouter le pot</button>
     </form>
 
     <a href="/logout">Déconnexion</a>
