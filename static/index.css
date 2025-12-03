@@ -1,10 +1,107 @@
+/* ==== BODY ==== */
 body {
-  background-color: #f0f0f0;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 100px;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* on commence en haut */
+    align-items: center;
+    padding: 40px 20px;
 }
 
-h1 {
-  color: #a50000;
+/* ==== TITRES ==== */
+h2, h3 {
+    color: #a50000;
+    text-align: center;
+    margin: 20px 0;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+h3 {
+    font-size: 28px;
+}
+
+/* ==== LISTE DES POTS ==== */
+ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    max-width: 500px;
+}
+
+li {
+    background-color: #fff;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+li strong {
+    font-size: 18px;
+}
+
+/* Ligne de séparation si tu veux garder le <hr> */
+li hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 10px 0 0 0;
+}
+
+/* ==== FORMULAIRE ==== */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 500px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #a50000;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #850000;
+}
+
+/* ==== BOUTON DECONNEXION ==== */
+.bouton {
+    margin-top: 20px; /* espace avec le contenu au-dessus */
+}
+.bouton a {
+    display: inline-block;
+    text-decoration: none; 
+    color: #fff; /* couleur spécifique pour le bouton */
+    border-radius: 12px;
+    background-color: rgb(33, 27, 209);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 10px 20px;
+    transition: background-color 0.2s ease;
+}
+
+.bouton a:hover {
+    background-color: #1f6de3;
 }
